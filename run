@@ -1,0 +1,4 @@
+#!/bin/sh
+
+g++ -std=c++14 solver.cpp -o solver
+./solver
