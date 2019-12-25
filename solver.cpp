@@ -5,6 +5,9 @@
 
 using namespace std;
 
+#define equals(a, b) equal(a.begin(), a.end(), b.begin())
+#define debug(arr, bg, ed) printf("%s: ", #arr); for(int i = bg; i < ed; i++) printf("%d%c", arr[i], i == (ed-1) ? '\n':' ');
+
 struct Game {
 	int dimension;
 	vector< vector<int> > matrix, lines, columns;
@@ -21,13 +24,134 @@ struct Game {
 	}
 
 	void showMatrix() {
+		char ch;
 		for(int i = 0; i < dimension; i++) {
-			for(int j = 0; j < dimension; j++) printf("%d%c", matrix[i][j], j != (dimension-1) ? ' ' : '\n');
+			for(int j = 0; j < dimension; j++) {
+				if(matrix[i][j] == -1) ch = 'O';
+				else ch = (matrix[i][j] == 1) ? '#' : 'X';
+				printf("%c", ch);
+			}
+			printf("\n");
 		}
 	}
-} game;
 
-void readInput() {
+	bool updateLine(int idx) {
+		int newVal, pos;
+		bool hasChanged = false, go;
+
+		vector<int> aux;
+		vector< vector<int> > auxLines;
+
+		for(int i = 1; i < (1 << dimension); i++) {
+			go = true;
+			aux.clear();
+			for(int j = 0; j < dimension; j++) {
+				if( (i & (1 << j)) != 0 ) newVal = 1;
+				else newVal = 0;
+
+				if(matrix[idx][j] != -1 and matrix[idx][j] != newVal) go = false;
+				aux.push_back(newVal);
+			}
+			if(go) auxLines.push_back(aux);
+		}
+
+		for(int i = auxLines.size() - 1; i >= 0; i--) {
+			aux.clear();
+			newVal = pos = 0;
+			while(pos < dimension) {
+				if( auxLines[i][pos] == 0 ) {
+					if(newVal != 0) aux.push_back(newVal), newVal = 0;
+				}
+				else newVal++;
+				pos++;
+			}
+			if(newVal != 0) aux.push_back(newVal);
+			if( not equals(aux, lines[idx]) ) auxLines.erase( auxLines.begin() + i );
+		}
+
+		if( auxLines.size() > 0 ) {
+			for(int j = 0; j < dimension; j++) {
+				if(matrix[idx][j] != -1) continue;
+				go = true;
+				newVal = auxLines[0][j];
+				for(int i = 1; i < (int)auxLines.size(); i++) {
+					if(newVal != auxLines[i][j]) go = false;
+				}
+				if(go) matrix[idx][j] = newVal, hasChanged = true;
+			}
+		}
+
+		return hasChanged;
+	}
+
+	bool updateColumn(int idx) {
+		int newVal, pos;
+		bool hasChanged = false, go;
+
+		vector<int> aux;
+		vector< vector<int> > auxLines;
+
+		for(int i = 1; i < (1 << dimension); i++) {
+			go = true;
+			aux.clear();
+			for(int j = 0; j < dimension; j++) {
+				if( (i & (1 << j)) != 0 ) newVal = 1;
+				else newVal = 0;
+
+				if(matrix[j][idx] != -1 and matrix[j][idx] != newVal) go = false;
+				aux.push_back(newVal);
+			}
+			if(go) auxLines.push_back(aux);
+		}
+
+		for(int i = auxLines.size() - 1; i >= 0; i--) {
+			aux.clear();
+			newVal = pos = 0;
+			while(pos < dimension) {
+				if( auxLines[i][pos] == 0 ) {
+					if(newVal != 0) aux.push_back(newVal), newVal = 0;
+				}
+				else newVal++;
+				pos++;
+			}
+			if(newVal != 0) aux.push_back(newVal);
+			if( not equals(aux, columns[idx]) ) auxLines.erase( auxLines.begin() + i );
+		}
+
+		if( auxLines.size() > 0 ) {
+			for(int j = 0; j < dimension; j++) {
+				if(matrix[j][idx] != -1) continue;
+				go = true;
+				newVal = auxLines[0][j];
+				for(int i = 1; i < (int)auxLines.size(); i++) {
+					if(newVal != auxLines[i][j]) go = false;
+				}
+				if(go) matrix[j][idx] = newVal, hasChanged = true;
+			}
+		}
+
+		return hasChanged;
+	}
+
+	void solve() {
+		bool finished = false;
+		while(not finished) {
+			finished = true;
+			for(int i = 0; i < dimension; i++) {
+				if( updateLine(i) ) finished = false;
+				if( updateColumn(i) ) finished = false;
+			}
+		}
+	}
+
+};
+
+void readInput(Game &game) {
+	// dimension
+	// info lines
+	// info columns
+	// (not mandatory) grid
+
 	int dimension;
 
 	cin >> dimension;
@@ -58,11 +182,13 @@ void readInput() {
 			for(int j = 0; j < dimension; j++) cin >> game.matrix[i][j];
 		}
 	}
-
-	game.showMatrix();
 }
 
 int main() {
-	readInput();
+	Game game;
+	readInput(game);
+
+	game.solve();
+	game.showMatrix();
 	return 0;
 }
