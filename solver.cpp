@@ -5,8 +5,13 @@
 
 using namespace std;
 
-#define equals(a, b) equal(a.begin(), a.end(), b.begin())
-#define debug(arr, bg, ed) printf("%s: ", #arr); for(int i = bg; i < ed; i++) printf("%d%c", arr[i], i == (ed-1) ? '\n':' ');
+bool equals(vector<int> a, vector<int> b) {
+	if( a.size() != b.size() ) return false;
+	for(int i = 0; i < (int) a.size(); i++) {
+		if(a[i] != b[i]) return false;
+	}
+	return true;
+}
 
 struct Game {
 	int dimension;

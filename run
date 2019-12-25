@@ -1,6 +1,6 @@
 #!/bin/sh
 
 echo 'Compiling...'
-g++ -std=c++14 solver.cpp -o solver
-echo 'Now running.'
+g++ -std=c++14 -O2 solver.cpp -o solver
+echo 'Now running.\n'
 ./solver
