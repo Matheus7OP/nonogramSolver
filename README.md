@@ -29,7 +29,10 @@ Input file should be like this:
 4
 ```
 
-First line: dimension of the grid (let's say N, then the grid is NxN)  Next N lines: information about the N lines  Next N lines: information about the N columns  Next N lines (NOT MANDATORY), each with N characters: the grid itself. Sometimes the initial grid already has some symbols, so you can use this option.
+First line: dimension of the grid (let's say N, then the grid is NxN)   
+Next N lines: information about the N lines   
+Next N lines: information about the N columns   
+Next N lines (NOT MANDATORY), each with N characters: the grid itself. Sometimes the initial grid already has some symbols, so you can use this option.
 
 ## Usage
 
