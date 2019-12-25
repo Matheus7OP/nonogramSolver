@@ -29,14 +29,13 @@ struct Game {
 	}
 
 	void showMatrix() {
-		char ch;
+		cout << "Resulting grid is: " << endl;
 		for(int i = 0; i < dimension; i++) {
 			for(int j = 0; j < dimension; j++) {
-				if(matrix[i][j] == -1) ch = 'O';
-				else ch = (matrix[i][j] == 1) ? '#' : 'X';
-				printf("%c", ch);
+				if(j != 0) cout << " ";
+				cout << ((matrix[i][j] == 1) ? 'O' : 'X');
 			}
-			printf("\n");
+			cout << endl;
 		}
 	}
 
@@ -148,14 +147,15 @@ struct Game {
 			}
 		}
 	}
-
 };
 
 void readInput(Game &game) {
-	// dimension
-	// info lines
-	// info columns
-	// (not mandatory) grid
+	/**
+	* dimension
+	* info lines
+	* info columns
+	* (not mandatory) grid
+	**/
 
 	int dimension;
 
@@ -164,7 +164,7 @@ void readInput(Game &game) {
 	
 	game = Game(dimension);
 
-	// lines
+	// reading lines
 	for(int i = 0; i < dimension; i++) {
 		string line, token;
 		getline(cin, line);
@@ -173,7 +173,7 @@ void readInput(Game &game) {
 		while(ss >> token) game.lines[i].push_back( stoi(token) );
 	}
 
-	// columns
+	// reading columns
 	for(int i = 0; i < dimension; i++) {
 		string line, token;
 		getline(cin, line);
